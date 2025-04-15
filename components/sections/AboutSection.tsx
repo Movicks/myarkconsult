@@ -11,7 +11,7 @@ const AboutSection = () => {
   ];
 
   return (
-    <section id="about" className="py-20 bg-white">
+    <section id="about" className="py-10 bg-white">
       <div className="section-container">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
