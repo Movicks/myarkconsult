@@ -17,7 +17,7 @@ const HeroSection = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 w-full h-full flex items-center justify-center bg-black/50">
+      <div className="relative z-10 w-full h-full flex items-center justify-center bg-black/40">
         <div className="container mx-auto px-4 lg:px-10 w-full">
           <div className="flex gap-8 items-center justify-center text-white">
             <div className="animate-fade-in text-white w-full flex flex-col items-center text-center justify-center">
@@ -28,7 +28,7 @@ const HeroSection = () => {
                 Expert consulting for Contact Centers and BPO operations to transform customer interactions and drive business growth.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto items-center md:items-start">
-                <a href="#contact" className="consultant-btn w-full lg:w-[15rem] inline-flex items-center justify-center hover:bg-white hover:text-blue-500">
+                <a href="#contact" className="consultant-btn w-full whitespace-nowrap lg:w-[15rem] inline-flex items-center justify-center hover:bg-white hover:text-blue-500">
                   Book a Consultation
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </a>

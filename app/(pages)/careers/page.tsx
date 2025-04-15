@@ -6,6 +6,7 @@ import CareersList from '@/components/sections/CareersList';
 import JobApplicationForm from '@/components/sections/JobApplicationForm';
 import JobDetailsDialog from '@/components/sections/JobDetailsDialog';
 import { JobCategory, jobListings } from '@/data/jobListings';
+import Image from 'next/image';
 
 export type JobListing = {
   id: string;
@@ -77,31 +78,46 @@ const Careers = () => {
 
   return (
     <>
-      <div className="pt-24 bg-gray-50 lg:px-7">
-        <div className="container mx-auto px-4 py-12">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="text-consultant-blue">Join Our</span> Team
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              We're always looking for talented professionals to help us deliver exceptional customer experience solutions. Explore our open positions below.
-            </p>
-          </div>
+      <div className="bg-gray-50">
+        <div className="">
+            {/* hero section */}
+            <div className='relative'>
+                <div className="relative h-[35rem] bg-gradient-to-b from-white to-gray-50">
+                    <div className="absolute inset-0">
+                        <Image
+                        src="/BG-IMAGE-MY-ARK.avif"
+                        alt="hero"
+                        fill
+                        className="object-cover w-full h-full"
+                        />
+                    </div>
+                    <div className="relative z-0 w-full h-full flex flex-col items-center justify-center bg-black/40 text-center mb-12 px-4">
+                        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                        <span className="text-consultant-blue">Join Our</span> <span className='text-gray-200'>Team</span>
+                        </h1>
+                        <p className="text-lg text-gray-200 max-w-2xl mx-auto">
+                        We're always looking for talented professionals to help us deliver exceptional customer experience solutions. Explore our open positions below.
+                        </p>
+                    </div>
+                </div>
+                
+                <div className='absolute px-4 md:px-10 -mt-[6rem] w-full'>
+                    <CareerFilters onFilter={handleFilter} />
+                </div>
+            </div>
           
-          <CareerFilters onFilter={handleFilter} />
-          
-          <div className="mt-8">
-            <CareersList 
-              jobs={filteredJobs} 
-              onJobSelect={handleJobSelect} 
-              selectedJobId={selectedJob?.id}
-              onViewDetails={handleViewDetails}
-            />
-          </div>
+            <div className="mt-[20rem] md:mt-[12rem] lg:mt-23 px-4 md:px-10">
+                <CareersList 
+                jobs={filteredJobs} 
+                onJobSelect={handleJobSelect} 
+                selectedJobId={selectedJob?.id}
+                onViewDetails={handleViewDetails}
+                />
+            </div>
 
-          <div id="application-form" className="mt-16">
-            <JobApplicationForm selectedJob={selectedJob} onSubmit={handleApplicationSubmit} />
-          </div>
+            <div id="application-form" className="mt-16 lg:px-[20rem]">
+                <JobApplicationForm selectedJob={selectedJob} onSubmit={handleApplicationSubmit} />
+            </div>
         </div>
       </div>
       

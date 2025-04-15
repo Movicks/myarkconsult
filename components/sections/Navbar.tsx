@@ -48,7 +48,7 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-8 items-center">
+        <nav className="hidden xl:flex space-x-8 items-center">
           {navLinks.map((link) => (
             <Link
               key={link.name}
@@ -70,7 +70,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <button 
-          className={cn("md:hidden flex items-center justify-center rounded-lg p-1 hover:bg-gray-500/50 hover:border-2 ", scrolled ? "text-consultant-dark" : "text-white")}
+          className={cn("lg:hidden flex items-center justify-center rounded-lg p-1 hover:bg-gray-500/50 hover:border-2 ", scrolled ? "text-consultant-dark" : "text-white")}
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
@@ -82,7 +82,7 @@ const Navbar = () => {
       <div 
         className={`fixed inset-0 bg-white z-40 transform transition-transform duration-300 ease-in-out ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        } md:hidden`}
+        } lg:hidden`}
       > 
         <div className="flex flex-col h-full justify-center items-center space-y-8 p-4">
           

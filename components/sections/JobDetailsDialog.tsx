@@ -30,11 +30,11 @@ const JobDetailsDialog = ({ job, isOpen, onOpenChange, onApply }: JobDetailsDial
   
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto bg-white pt-20">
+      <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto bg-white pt-20 rounded-t-xl">
         <DialogHeader>
           <div className="flex justify-between items-start">
             <div>
-              <DialogTitle className="text-2xl font-bold">{job.title}</DialogTitle>
+              <DialogTitle className="text-2xl font-bold text-start">{job.title}</DialogTitle>
               <DialogDescription className="mt-2">
                 <div className="flex flex-wrap gap-2 text-sm text-gray-500">
                   <div className="flex items-center">
@@ -91,7 +91,7 @@ const JobDetailsDialog = ({ job, isOpen, onOpenChange, onApply }: JobDetailsDial
           </ul>
         </div>
         
-        <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-between sm:space-x-2">
+        <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-between sm:space-x-2 gap-2">
           <DialogClose asChild>
             <Button variant="outline">Close</Button>
           </DialogClose>
@@ -100,7 +100,7 @@ const JobDetailsDialog = ({ job, isOpen, onOpenChange, onApply }: JobDetailsDial
               onApply(job);
               onOpenChange(false);
             }}
-            className="bg-consultant-blue hover:bg-consultant-blue/90"
+            className="bg-consultant-blue hover:bg-consultant-blue/80"
           >
             Apply Now
           </Button>
