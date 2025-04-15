@@ -42,7 +42,7 @@ const Navbar = () => {
       )}
     >
       <div className="container mx-auto px-4 lg:px-10 flex justify-between items-center">
-        <Link href="/" className={cn("text-[1.7rem] md:text-[2.3rem] font-bold mb-4 flex items-center rounded-lg overflow-hidden", scrolled ? "text-consultant-dark" : "text-white")}>
+        <Link href="/" className={cn("text-[1.7rem] md:text-[2.3rem] font-bold flex items-center rounded-lg overflow-hidden", scrolled ? "text-consultant-dark" : "text-white")}>
           <span className="text-consultant-blue md:text-[2.1rem]">MyArk</span>Consult
         </Link>
 
@@ -69,7 +69,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <button 
-          className="md:hidden text-consultant-dark flex items-center h-full" 
+          className={cn("md:hidden flex items-center justify-center rounded-lg p-1 hover:bg-gray-500/50 hover:border-2 ", scrolled ? "text-consultant-dark" : "text-white")}
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
