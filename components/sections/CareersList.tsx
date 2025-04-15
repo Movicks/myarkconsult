@@ -14,7 +14,7 @@ interface CareersListProps {
 
 const CareersList = ({ jobs, onJobSelect, selectedJobId, onViewDetails }: CareersListProps) => {
   return (
-    <div>
+    <div className=''>
       <h2 className="text-2xl font-semibold mb-6">Open Positions ({jobs.length})</h2>
       
       {jobs.length === 0 ? (
@@ -32,7 +32,7 @@ const CareersList = ({ jobs, onJobSelect, selectedJobId, onViewDetails }: Career
               <div 
                 key={job.id} 
                 className={`bg-white rounded-lg shadow hover:shadow-md transition-all duration-300 ${
-                  selectedJobId === job.id ? 'ring-2 ring-consultant-blue' : ''
+                  selectedJobId === job.id ? 'ring-2 ring-blue-500' : ''
                 }`}
               >
                 <div className="p-6">
