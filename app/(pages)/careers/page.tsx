@@ -1,6 +1,5 @@
 "use client"
 import React, { useState } from 'react';
-import { useToast } from "@/hooks/use-toast";
 import CareerFilters from '@/components/sections/CareerFilters';
 import CareersList from '@/components/sections/CareersList';
 import JobApplicationForm from '@/components/sections/JobApplicationForm';
@@ -26,7 +25,6 @@ const Careers = () => {
   const [filteredJobs, setFilteredJobs] = useState<JobListing[]>(jobListings);
   const [detailsJob, setDetailsJob] = useState<JobListing | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const { toast } = useToast();
   
   const handleJobSelect = (job: JobListing) => {
     setSelectedJob(job);
@@ -68,13 +66,6 @@ const Careers = () => {
     setFilteredJobs(filtered);
   };
   
-  const handleApplicationSubmit = (data: any) => {
-    toast({
-      title: "Application Submitted!",
-      description: "We've received your application and will be in touch soon.",
-    });
-    setSelectedJob(null);
-  };
 
   return (
     <>
@@ -116,7 +107,7 @@ const Careers = () => {
             </div>
 
             <div id="application-form" className="mt-16 lg:px-[20rem]">
-                <JobApplicationForm selectedJob={selectedJob} onSubmit={handleApplicationSubmit} />
+                <JobApplicationForm selectedJob={selectedJob} setSelectedJob={setSelectedJob} />
             </div>
         </div>
       </div>

@@ -6,12 +6,10 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Checkbox } from "@/components/ui/checkbox";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { JobListing } from '@/app/(pages)/careers/page';
-
-interface JobApplicationFormProps {
-  selectedJob: JobListing | null;
-  onSubmit: (data: any) => void;
-}
+import { sendApplication } from '@/actions/sendApplication';
+import { toast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 const formSchema = z.object({
   firstName: z.string().min(2, "First name is required"),
@@ -35,19 +33,22 @@ const formSchema = z.object({
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message: "Either a resume file or link is required",
-      path: ["resumeFile"], // Changed from "resume" to "resumeFile"
+      path: ["resumeFile"],
     });
   }
   if (data.resumeFile && data.resumeLink) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message: "Please provide either a file or a link, not both",
-      path: ["resumeFile"], // Changed from "resume" to "resumeFile"
+      path: ["resumeFile"],
     });
   }
 });
 
-const JobApplicationForm = ({ selectedJob, onSubmit }: JobApplicationFormProps) => {
+const JobApplicationForm = ({ selectedJob, setSelectedJob }: any) => {
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -68,25 +69,56 @@ const JobApplicationForm = ({ selectedJob, onSubmit }: JobApplicationFormProps) 
   });
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-    const formData = new FormData();
-    
-    Object.entries(data).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        if (key === 'resumeFile' && value instanceof File) {
-          formData.append(key, value, value.name);
-        } else if (key !== 'resumeFile') {
-          formData.append(key, value.toString());
+    setIsSubmitting(true);
+    try {
+      const formData = new FormData();
+      
+      // Append all form data
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          if (key === 'resumeFile' && value instanceof File) {
+            formData.append(key, value, value.name);
+          } else if (key !== 'resumeFile') {
+            formData.append(key, value.toString());
+          }
         }
+      });
+
+      // Add job information
+      if (selectedJob) {
+        formData.append('jobTitle', selectedJob.title);
+        formData.append('jobId', selectedJob.id || '');
       }
-    });
 
-    if (selectedJob) {
-      formData.append('jobId', selectedJob.id || '');
-      formData.append('jobTitle', selectedJob.title || '');
+      // Call server action
+      const result = await sendApplication(formData);
+
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: result.message,
+          variant: "default",
+        });
+        setIsSubmitted(true);
+        form.reset();
+        setSelectedJob(null);
+      } else {
+        toast({
+          title: "Error",
+          description: result.message,
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+      console.error('Submission error:', error);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    onSubmit(formData);
-    form.reset();
   };
 
   if (!selectedJob) {
@@ -94,6 +126,26 @@ const JobApplicationForm = ({ selectedJob, onSubmit }: JobApplicationFormProps) 
       <div className="bg-white rounded-lg shadow p-8 text-center">
         <h2 className="text-2xl font-semibold mb-4">Apply for a Position</h2>
         <p className="text-gray-600">Select a job from the list above to begin your application.</p>
+      </div>
+    );
+  }
+
+  if (isSubmitted) {
+    return (
+      <div className="bg-white rounded-lg shadow p-8 text-center">
+        <div className="mb-6">
+          <svg className="w-16 h-16 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+        <h2 className="text-2xl font-semibold mb-2">Application Submitted!</h2>
+        <p className="text-gray-600 mb-6">Thank you for applying to {selectedJob.title}.</p>
+        <Button 
+          onClick={() => setIsSubmitted(false)}
+          className="bg-blue-600 hover:bg-blue-700"
+        >
+          Apply for another position
+        </Button>
       </div>
     );
   }
@@ -368,12 +420,20 @@ const JobApplicationForm = ({ selectedJob, onSubmit }: JobApplicationFormProps) 
           />
           
           <div className="pt-4">
-            <button
+            <Button
               type="submit"
-              className="w-full md:w-auto px-8 py-3 bg-consultant-blue text-white font-semibold rounded hover:bg-opacity-90 transition-colors duration-300"
+              disabled={!form.formState.isValid || isSubmitting}
+              className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition-colors duration-300"
             >
-              Submit Application
-            </button>
+              {isSubmitting ? (
+                <>
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                "Submit Application"
+              )}
+            </Button>
           </div>
         </form>
       </Form>
