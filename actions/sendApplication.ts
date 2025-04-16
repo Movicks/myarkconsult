@@ -41,62 +41,183 @@ export async function sendApplication(formData: FormData) {
 
     // Create email content for recruiter
     const recruiterEmailHtml = `
-      <html>
-        <body>
-          <h1>New Job Application</h1>
-          <h2>Position: ${data.jobTitle}</h2>
+    <html>
+      <head>
+        <style>
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+          }
+          .header {
+            background-color: #2563eb;
+            color: white;
+            padding: 25px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+          }
+          .content {
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+          }
+          h1 {
+            margin: 0;
+            font-size: 24px;
+          }
+          h2 {
+            color: #2563eb;
+            font-size: 20px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+          }
+          .info-card {
+            background-color: #f8fafc;
+            border-left: 4px solid #2563eb;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+          }
+          .button {
+            display: inline-block;
+            background-color: #2563eb;
+            color: white !important;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            margin-top: 10px;
+          }
+          .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>New Candidate Application</h1>
+          <p>${data.jobTitle}</p>
+        </div>
+        
+        <div class="content">
+          <div class="info-card">
+            <h3>Candidate Details</h3>
+            <p><strong>${data.firstName} ${data.lastName}</strong></p>
+            <p>Email: ${data.email}</p>
+            <p>Phone: ${data.phone}</p>
+            ${data.linkedin ? `<p>LinkedIn: <a href="${data.linkedin}" target="_blank">View Profile</a></p>` : ''}
+          </div>
           
-          <h3>Applicant Information</h3>
-          <p><strong>Name:</strong> ${data.firstName} ${data.lastName}</p>
-          <p><strong>Email:</strong> ${data.email}</p>
-          <p><strong>Phone:</strong> ${data.phone}</p>
-          ${data.linkedin ? `<p><strong>LinkedIn:</strong> ${data.linkedin}</p>` : ''}
-          
-          <h3>Address</h3>
+          <h2>Location</h2>
           <p>${data.address}<br>
           ${data.city}, ${data.state} ${data.postalCode}<br>
           ${data.country}</p>
           
-          <h3>Resume</h3>
-          <p>${data.resumeLink ? 
-            `<a href="${data.resumeLink}">View Resume</a>` : 
-            'Resume attached to this email'}</p>
+          <h2>Application Materials</h2>
+          ${data.resumeLink ? 
+            `<a href="${data.resumeLink}" class="button">View Resume Online</a>` : 
+            '<p>Resume attached to this email</p>'}
           
-          <h3>Cover Letter</h3>
-          <p>${data.coverLetter || 'No cover letter provided'}</p>
-        </body>
-      </html>
+          <h2>Cover Letter</h2>
+          <div style="background-color: #f1f5f9; padding: 15px; border-radius: 6px;">
+            <p>${data.coverLetter || 'No cover letter provided'}</p>
+          </div>
+          
+          <div class="footer">
+            <p>This application was submitted via MyArk Careers Portal</p>
+          </div>
+        </div>
+      </body>
+    </html>
     `;
 
     // Create email content for applicant
     const applicantEmailHtml = `
-      <html>
-        <body>
-          <h1>Application Confirmation</h1>
-          <p>Dear ${data.firstName} ${data.lastName},</p>
+    <html>
+      <head>
+        <style>
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+          }
+          .header {
+            background-color: #2563eb;
+            color: white;
+            padding: 25px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+          }
+          .content {
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+          }
+          h1 {
+            margin: 0;
+            font-size: 24px;
+          }
+          .highlight {
+            background-color: #dbeafe;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+          }
+          .summary-item {
+            margin-bottom: 10px;
+          }
+          .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+          }
+          .signature {
+            color: #2563eb;
+            font-weight: 500;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>Thank You for Applying, ${data.firstName}!</h1>
+        </div>
+        
+        <div class="content">
+          <p>We appreciate your interest in joining our team.</p>
           
-          <p>Thank you for applying for the position of <strong>${data.jobTitle}</strong>.</p>
+          <div class="highlight">
+            <p>Your application for <strong>${data.jobTitle}</strong> has been received. Our talent team will review it carefully and contact you if your qualifications match our requirements.</p>
+          </div>
           
-          <p>We have received your application and our recruiting team will review it carefully. 
-          If your qualifications match our requirements, we will contact you for the next steps 
-          in the hiring process.</p>
+          <h2>Application Summary</h2>
           
-          <p>Here's a summary of the information you submitted:</p>
-          <ul>
-            <li><strong>Name:</strong> ${data.firstName} ${data.lastName}</li>
-            <li><strong>Email:</strong> ${data.email}</li>
-            <li><strong>Phone:</strong> ${data.phone}</li>
-            ${data.linkedin ? `<li><strong>LinkedIn:</strong> ${data.linkedin}</li>` : ''}
-            <li><strong>Position Applied:</strong> ${data.jobTitle}</li>
-          </ul>
+          <div class="summary-item"><strong>Name:</strong> ${data.firstName} ${data.lastName}</div>
+          <div class="summary-item"><strong>Email:</strong> ${data.email}</div>
+          <div class="summary-item"><strong>Phone:</strong> ${data.phone}</div>
+          ${data.linkedin ? `<div class="summary-item"><strong>LinkedIn:</strong> ${data.linkedin}</div>` : ''}
+          <div class="summary-item"><strong>Position:</strong> ${data.jobTitle}</div>
           
-          <p>If you need to update any information or have any questions, please feel free to 
-          reply to this email.</p>
+          <p>If you need to update any information, please reply to this email.</p>
           
-          <p>Best regards,<br>
-          The Hiring Team</p>
-        </body>
-      </html>
+          <div class="footer">
+            <p>We appreciate your interest in MyArk!</p>
+            <p class="signature">The MyArk Hiring Team</p>
+          </div>
+        </div>
+      </body>
+    </html>
     `;
 
     // Prepare email options for recruiter
@@ -117,7 +238,6 @@ export async function sendApplication(formData: FormData) {
       to: data.email,
       subject: `Application Confirmation for ${data.jobTitle}`,
       html: applicantEmailHtml,
-      // Don't attach resume to the confirmation email
     };
 
     // Send both emails
