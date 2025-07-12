@@ -143,7 +143,7 @@ const About = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
             {/* Mission */}
-            <div className="bg-white p-8 rounded-lg shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
+            <div className="bg-white p-8 shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
               <div className="flex justify-center mb-4">
                 <div className="p-3 rounded-full bg-blue-100">
                   <BookOpen className="h-8 w-8 text-consultant-blue" />
@@ -163,7 +163,7 @@ const About = () => {
             </div>
             
             {/* Vision */}
-            <div className="bg-white p-8 rounded-lg shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
+            <div className="bg-white p-8 shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
               <div className="flex justify-center mb-4">
                 <div className="p-3 rounded-full bg-blue-100">
                   <Target className="h-8 w-8 text-consultant-blue" />
@@ -183,7 +183,7 @@ const About = () => {
             </div>
             
             {/* Values */}
-            <div className="bg-white p-8 rounded-lg shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
+            <div className="bg-white p-8 shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
               <div className="flex justify-center mb-4">
                 <div className="p-3 rounded-full bg-blue-100">
                   <Award className="h-8 w-8 text-consultant-blue" />
@@ -237,7 +237,7 @@ const About = () => {
               <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-consultant-blue rounded-full opacity-15 animate-pulse" style={{animationDelay: "0.5s"}}></div>
               
               {/* Performance metrics card */}
-              <div className="relative z-10 bg-white backdrop-blur-sm p-8 rounded-lg shadow-xl">
+              <div className="relative z-10 bg-white backdrop-blur-sm p-8 shadow-xl">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-8">
                     <div>
@@ -330,7 +330,7 @@ const About = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-6">
             {partners.map((partner, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+              <div key={index} className="bg-white p-6 shadow-md hover:shadow-lg transition-shadow duration-300">
                 <div className="flex justify-center mb-4">
                   <Building className="h-10 w-10 text-consultant-blue" />
                 </div>
@@ -366,7 +366,7 @@ const About = () => {
               {clients.map((client, index) => (
                 <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                   <div className="h-full p-4">
-                    <div className="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+                    <div className="bg-blue-50 p-6 hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
                       <div className="flex justify-center mb-4">
                         <Briefcase className="h-10 w-10 text-consultant-blue" />
                       </div>
@@ -401,7 +401,7 @@ const About = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
-            <div className="bg-white p-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:transform hover:translate-y-[-5px]">
+            <div className="bg-white p-6 transition-all duration-300 hover:shadow-lg hover:transform hover:translate-y-[-5px]">
               <div className="mb-4 text-consultant-blue">
                 <Headphones className="h-10 w-10" />
               </div>
@@ -411,7 +411,7 @@ const About = () => {
               </p>
             </div>
             
-            <div className="bg-white p-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:transform hover:translate-y-[-5px]">
+            <div className="bg-white p-6 transition-all duration-300 hover:shadow-lg hover:transform hover:translate-y-[-5px]">
               <div className="mb-4 text-consultant-blue">
                 <LineChart className="h-10 w-10" />
               </div>
@@ -421,7 +421,7 @@ const About = () => {
               </p>
             </div>
             
-            <div className="bg-white p-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:transform hover:translate-y-[-5px]">
+            <div className="bg-white p-6 transition-all duration-300 hover:shadow-lg hover:transform hover:translate-y-[-5px]">
               <div className="mb-4 text-consultant-blue">
                 <Users className="h-10 w-10" />
               </div>
@@ -431,7 +431,7 @@ const About = () => {
               </p>
             </div>
             
-            <div className="bg-white p-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:transform hover:translate-y-[-5px]">
+            <div className="bg-white p-6 transition-all duration-300 hover:shadow-lg hover:transform hover:translate-y-[-5px]">
               <div className="mb-4 text-consultant-blue">
                 <BarChart3 className="h-10 w-10" />
               </div>

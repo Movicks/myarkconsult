@@ -92,7 +92,7 @@ const Careers = () => {
                     </div>
                 </div>
                 
-                <div className='absolute px-4 md:px-10 -mt-[6rem] w-full'>
+                <div className='absolute px-4 md:px-10 lg:px-30 -mt-[6rem] w-full'>
                     <CareerFilters onFilter={handleFilter} />
                 </div>
             </div>

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import Image from 'next/image';
 
 
 const Navbar = () => {
@@ -44,7 +45,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 lg:px-10 flex justify-between items-center">
         <Link href="/" className={cn("text-[1.7rem] md:text-[2.3rem] font-bold flex items-center rounded-lg overflow-hidden", scrolled ? "text-consultant-dark" : "text-white")}>
-          <span className="text-consultant-blue md:text-[2.1rem]">MyArk</span>Consult
+          <Image src="/nav_logo.png" width={200} height={70} alt="Myark Consult Logo" className="" />
         </Link>
 
         {/* Desktop Navigation */}

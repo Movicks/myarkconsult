@@ -1,5 +1,6 @@
 import React from 'react';
 import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import Image from 'next/image';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -47,7 +48,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           <div className="lg:col-span-2">
             <a href="#" className="text-[1.7rem] md:text-[2.3rem] font-bold mb-4 inline-block">
-              <span className="text-consultant-blue">MyArk</span>Consult
+              <Image src="/myark_white_bg_logo.jpg" width={200} height={20} alt="Myark Consult Logo" className="rounded-lg" />
             </a>
             <p className="text-gray-400 mb-6 max-w-sm">
               Expert consulting services tailored to help your business overcome challenges 

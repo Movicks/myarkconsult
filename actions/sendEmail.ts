@@ -134,7 +134,7 @@ export async function sendEmail(formData: FormData) {
 
   // Email options
   const mailOptions = {
-    from: `"MyArkConsult Website" <${process.env.EMAIL_USER}>`,
+    from: `"MyArk Consult Website" <${process.env.EMAIL_USER}>`,
     to: process.env.EMAIL_RECEIVER || 'info@myarkconsult.com',
     subject: `New Contact: ${formData.name}`,
     text: `

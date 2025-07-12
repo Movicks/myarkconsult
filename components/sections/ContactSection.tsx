@@ -4,8 +4,23 @@ import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { sendEmail } from '@/actions/sendEmail';
 
+
+type FormData = {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+};
+
+type FieldErrors = {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+};
+
 const ContactSection = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     phone: '',
@@ -15,28 +30,59 @@ const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone: string): boolean => {
+    if (!phone) return true; // Phone is optional
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+    return phoneRegex.test(phone.replace(/[\s()-]/g, ''));
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error when user types
+    if (fieldErrors[name as keyof FieldErrors]) {
+      setFieldErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setError(null);
-    
+    setIsSubmitting(true);
+  
+    const newErrors: FieldErrors = {
+      name: formData.name.trim() ? '' : 'Name is required',
+      email: !formData.email.trim() ? 'Email is required' : !validateEmail(formData.email) ? 'Please enter a valid email address' : '',
+      phone: !validatePhone(formData.phone) ? 'Please enter a valid phone number (+XX XXXX XXXXXX)' : '',
+      message: formData.message.trim() ? '' : 'Message is required',
+    };
+  
+    setFieldErrors(newErrors);
+  
+    const hasError = Object.values(newErrors).some(err => err !== '');
+    if (hasError) {
+      setIsSubmitting(false);
+      return;
+    }
+  
     try {
       const result = await sendEmail(formData);
-      
       if (result?.success) {
         setIsSubmitted(true);
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          message: '',
-        });
+        setFormData({ name: '', email: '', phone: '', message: '' });
+        setFieldErrors({ name: '', email: '', phone: '', message: '' });
       } else {
         setError(result?.error || 'Failed to send message');
       }
@@ -49,19 +95,19 @@ const ContactSection = () => {
 
   const contactInfo = [
     {
-      icon: <Mail className="h-6 w-6 text-blue-600" />,
+      icon: <Mail className="h-6 w-6 text-secondary" />,
       title: 'Email Us',
-      details: 'info@peakconsult.com',
-      action: 'mailto:info@peakconsult.com',
+      details: 'info@myarkconsult.com',
+      action: 'mailto:info@myarkconsult.com',
     },
     {
-      icon: <Phone className="h-6 w-6 text-blue-600" />,
+      icon: <Phone className="h-6 w-6 text-secondary" />,
       title: 'Call Us',
-      details: '+1 (555) 123-4567',
-      action: 'tel:+15551234567',
+      details: '+ (234) 706-202-8202',
+      action: 'tel:+2347062028202',
     },
     {
-      icon: <MapPin className="h-6 w-6 text-blue-600" />,
+      icon: <MapPin className="h-6 w-6 text-secondary" />,
       title: 'Visit Us',
       details: '123 Business Ave, Suite 500, New York, NY 10001',
       action: 'https://maps.google.com',
@@ -72,39 +118,19 @@ const ContactSection = () => {
     <section id="contact" className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h4 className="text-blue-600 font-semibold mb-2">GET IN TOUCH</h4>
-          <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mb-4">
-            <span className="text-blue-600">Contact Us</span> <span className="text-gray-900">Today</span>
+          <h4 className="relative w-fit mx-auto text-gray-900 font-semibold mb-2 text-xl md:text-2xl leading-[140%] before:absolute before:content-[''] before:left-1/2 before:translate-x-[-50%] before:bottom-0 before:w-1/2 before:h-[2px] before:bg-secondary before:rounded-full">
+            GET IN TOUCH
+          </h4>
+          <h2 className="font-bold tracking-tight text-gray-900 text-3xl sm:text-5xl lg:text-5xl mb-4">
+            <span className="leading-[140%] text-blue-600">Contact Us</span> <span className="text-gray-900">Today</span>
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-gray-600">
             Have questions or ready to start your journey with us? Reach out today and our team of experts will get back to you promptly.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          <div className="lg:col-span-1 space-y-8">
-            {contactInfo.map((item, index) => (
-              <div key={index} className="flex items-start bg-blue-50 p-6 rounded-lg">
-                <div className="bg-white p-3 rounded-lg mr-4 shadow-sm">
-                  {item.icon}
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg mb-1 text-gray-900">{item.title}</h3>
-                  <p className="text-gray-600 mb-2">{item.details}</p>
-                  <a
-                    href={item.action}
-                    className="text-blue-600 text-sm font-medium hover:underline flex items-center"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Connect <span className="ml-1">→</span>
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="lg:col-span-2 bg-gray-50 p-8 rounded-lg shadow-sm border border-gray-100">
+        <div className="grid grid-cols-1 gap-12 lg:flex lg:flex-row-reverse">
+          <div className="lg:w-2/3 lg:col-span-2 bg-blue-50/40 p-8 border border-gray-100">
             {isSubmitted ? (
               <div className="text-center py-12">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-600 mb-4">
@@ -136,10 +162,10 @@ const ContactSection = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      className={`w-full px-4 py-3 border ${fieldErrors.name ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-colors`}
                       placeholder="John Doe"
                     />
+                    {fieldErrors.name && <p className="text-red-500 text-sm mt-1">{fieldErrors.name}</p>}
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
@@ -151,10 +177,10 @@ const ContactSection = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                      className={`w-full px-4 py-3 border ${fieldErrors.email ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-colors`}
                       placeholder="john@example.com"
                     />
+                    {fieldErrors.email && <p className="text-red-500 text-sm mt-1">{fieldErrors.email}</p>}
                   </div>
                 </div>
 
@@ -168,9 +194,10 @@ const ContactSection = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className={`w-full px-4 py-3 border ${fieldErrors.phone ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-colors`}
                     placeholder="+1 (555) 123-4567"
                   />
+                  {fieldErrors.phone && <p className="text-red-500 text-sm mt-1">{fieldErrors.phone}</p>}
                 </div>
 
                 <div>
@@ -183,10 +210,10 @@ const ContactSection = () => {
                     rows={5}
                     value={formData.message}
                     onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className={`w-full px-4 py-3 border resize-none ${fieldErrors.message ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-colors`}
                     placeholder="Tell us about your business challenges..."
                   ></textarea>
+                  {fieldErrors.message && <p className="text-red-500 text-sm mt-1">{fieldErrors.message}</p>}
                 </div>
 
                 {error && (
@@ -198,7 +225,7 @@ const ContactSection = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-full flex items-center justify-center px-6 py-3 border border-transparent rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>
@@ -217,6 +244,28 @@ const ContactSection = () => {
               </form>
             )}
           </div>
+
+          <div className="lg:w-1/3 lg:col-span-1 space-y-2 md:space-y-8">
+            {contactInfo.map((item, index) => (
+              <div key={index} className="flex items-start bg-blue-50/40 px-6 py-6">
+                <div className="bg-white p-3 rounded-lg mr-4 shadow-sm">
+                  {item.icon}
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg mb-1 text-gray-900">{item.title}</h3>
+                  <p className="text-gray-600 mb-1 text-sm">{item.details}</p>
+                  <a
+                    href={item.action}
+                    className="text-blue-600 text-sm font-medium hover:underline flex items-center"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Connect <span className="ml-1">→</span>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div> 
         </div>
       </div>
     </section>
